@@ -1,0 +1,74 @@
+using Bet.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(policy => {
+    policy.AddPolicy("CorsAllAccessPolicy", opt =>
+        opt.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+    );
+});
+
+builder.Services.AddDbContext<BetContext>(
+    options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("BetConnection")));
+
+ConfigureAutomapper(builder.Services);
+RegisterServices(builder.Services);
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseCors("CorsAllAccessPolicy");
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
+void ConfigureAutomapper(IServiceCollection services)
+{
+    var config = new MapperConfiguration(cfg =>
+    {
+        cfg.CreateMap<Bet.Data.Entities.Bet, BetDTO>()
+        .ForMember(dest => dest.BetRows, src => src.MapFrom(s => s.BetRows))
+        .ForMember(dest => dest.User, src => src.MapFrom(s => s.User))
+        .ReverseMap()
+        .ForMember(dest => dest.BetRows, src => src.Ignore())
+        .ForMember(dest => dest.User, src => src.Ignore());
+        cfg.CreateMap<BetRow, BetRowDTO>()
+        .ReverseMap();
+        cfg.CreateMap<Team, TeamDTO>().ReverseMap();
+        cfg.CreateMap<User, UserDTO>()
+        .ForMember(dest => dest.Bets, src => src.MapFrom(s => s.Bets.Select(y => y.Id)))
+        .ReverseMap();
+    });
+
+    var mapper = config.CreateMapper();
+
+    services.AddSingleton(mapper);
+}
+
+void RegisterServices(IServiceCollection services)
+{
+    services.AddScoped<IDbService, DbService>();
+}
