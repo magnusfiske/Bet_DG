@@ -1,6 +1,7 @@
 using Bet.Token.API.Services;
 using Bet.Users.Database.Contexts;
 using Bet.Users.Database.Entities;
+using Bet.Users.Database.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,8 @@ builder.Services.AddIdentity<BetUser, IdentityRole>()
  .AddEntityFrameworkStores<BetUserContext>()
  .AddDefaultTokenProviders();
 
+RegisterServices(builder.Services);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,5 +56,6 @@ app.Run();
 
 void RegisterServices(IServiceCollection services)
 {
-    services.AddScoped<ITokenService, TokenService>();
+    services.AddScoped<IUserService, UserService>();
+    services.AddTransient<ITokenService, TokenService>();
 }

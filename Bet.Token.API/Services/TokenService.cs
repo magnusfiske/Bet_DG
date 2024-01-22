@@ -118,7 +118,9 @@ public class TokenService : ITokenService
 
             var user = await _userService.GetUserAsync(loginUserDTO.Email);
 
-            if (user == null) throw new UnauthorizedAccessException();
+            //bool isValidPassword = await _userManager.CheckPasswordAsync(user, loginUserDTO.Password);
+
+            if (user == null || !await _userManager.CheckPasswordAsync(user, loginUserDTO.Password)) throw new UnauthorizedAccessException();
 
             var token = await _userManager.GetAuthenticationTokenAsync(user, _configuration["Jwt:Issuer"], "JwtToken");
 

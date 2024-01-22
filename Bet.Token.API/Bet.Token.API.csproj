@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Bet.Users.Database\Bet.Users.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

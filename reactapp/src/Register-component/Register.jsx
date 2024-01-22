@@ -17,7 +17,7 @@ export default function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const requestOptions = {
-            method: 'POST',
+            method: 'POST', //TODO validera alla fält i frontend. Kanske även förtydliga felmeddelande i backend när det smäller på validering där.
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({"email": inputFields.email,
             "name": inputFields.userName,

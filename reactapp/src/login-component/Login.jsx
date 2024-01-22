@@ -12,13 +12,22 @@ export default function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email + ' ' + password);
+        const requestOptions = {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({"email": email,
+            "password": password
+            })
+        }
+        console.log(requestOptions);
+        const response = fetch('https://localhost:5001/api/token/', requestOptions)
+        .then(response => response.json())
+        .then(data => console.log(data));
     }
 
     const toggleRegister = (e) => {
         e.preventDefault();
         setRegister(!register);
-        console.log(register);
     }
         
 
