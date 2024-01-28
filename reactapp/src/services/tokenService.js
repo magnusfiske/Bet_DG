@@ -8,7 +8,7 @@ export const getToken = async (email, password) => {
         "password": password
         })
     }
-    console.log(requestOptions);
+
     const response = await fetch('https://localhost:5001/api/token/', requestOptions)
     if (response.ok) {
         console.log(response);

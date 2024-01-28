@@ -2,8 +2,11 @@ using Bet.Token.API.Services;
 using Bet.Users.Database.Contexts;
 using Bet.Users.Database.Entities;
 using Bet.Users.Database.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +24,27 @@ builder.Services.AddCors(policy => {
         .AllowAnyMethod()
     );
 });
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:SigningSecret"]));//(Convert.FromBase64String(builder.Configuration["Jwt:SigningSecret"]));
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = signingKey,
+            ClockSkew = TimeSpan.Zero
+        };
+        options.RequireHttpsMetadata = false;
+    });
 
 builder.Services.AddDbContext<BetUserContext>(
     options =>

@@ -1,4 +1,5 @@
 ﻿using Bet.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi;
 
@@ -18,11 +19,13 @@ public class TeamsController : ControllerBase
     }
 
     // GET: <TeamsController>
+    [Authorize(Roles = "Registered")]
     [HttpGet]
     public async Task<IResult> Get()
     {
         var response = await _db.GetAsync<Data.Entities.Team, TeamDTO>();
-        return Results.Ok(UpdatePositions(response));
+        var updatedPositions = UpdatePositions(response);
+        return Results.Ok(updatedPositions);
     }
 
     // GET <TeamsController>/5

@@ -10,7 +10,7 @@ public class UserService : IUserService
         _userManager = userManager;
     }
 
-    public async Task<BetUser> GetUserAsync(string email)
+    public async Task<BetUser> GetUserEmailAsync(string email)
     {
         try
         {
@@ -32,7 +32,14 @@ public class UserService : IUserService
             var hasher = new PasswordHasher<BetUser>();
             var result = hasher.VerifyHashedPassword(user, user.PasswordHash, loginUser.Password);
 
-            if (result.Equals(PasswordVerificationResult.Success)) return user;
+            if (result.Equals(PasswordVerificationResult.Success))
+            {
+                return user;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
         }
         catch
         {

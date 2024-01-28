@@ -2,6 +2,7 @@ using Bet.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,32 +21,33 @@ builder.Services.AddCors(policy => {
     );
 });
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//}).AddJwtBearer(options =>
-//{
-//    var signingKey = new SymmetricSecurityKey(Convert.FromBase64String(Configuration["Jwt:SigningSecret"]));
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:SigningSecret"]));//(Convert.FromBase64String(builder.Configuration["Jwt:SigningSecret"]));
 
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = false,
-//        ValidateAudience = false,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        IssuerSigningKey = signingKey,
-//        ClockSkew = TimeSpan.Zero
-//    };
-//    options.RequireHttpsMetadata = false;
-//});
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = signingKey,
+            ClockSkew = TimeSpan.Zero
+        };
+        options.RequireHttpsMetadata = false;
+    });
 
 
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy("Registered", policy => policy.RequireClaim("Registered", "true"));
-//    options.AddPolicy("Admin", policy => policy.RequireClaim("Admin", "true"));
-//});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Registered", policy => policy.RequireClaim("Registered", "true"));
+    options.AddPolicy("Admin", policy => policy.RequireClaim("Admin", "true"));
+});
 
 builder.Services.AddDbContext<BetContext>(
     options =>

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using System.Text;
 
 namespace Bet.Token.API.Services;
 
@@ -30,7 +32,7 @@ public class TokenService : ITokenService
                 throw new ArgumentException("JWT configuration missing");
             }
 
-            var signingKey = Convert.FromBase64String(_configuration["Jwt:SigningSecret"]);
+            var signingKey = Encoding.ASCII.GetBytes(_configuration["Jwt:SigningSecret"]);
 
             var credentials = new SigningCredentials(new SymmetricSecurityKey(signingKey), SecurityAlgorithms.HmacSha256Signature);
 
@@ -39,6 +41,17 @@ public class TokenService : ITokenService
             var now = DateTime.UtcNow;
 
             var expires = now.AddDays(duration);
+
+            //List<Claim> claims = new()
+            //{
+            //    new Claim(ClaimTypes.Name, user.UserName),
+            //    new Claim(ClaimTypes.Email, user.Email),
+            //};
+
+            //foreach (var role in roles)
+            //{
+            //    claims.Add(new Claim(ClaimTypes.Role, role));
+            //}
 
             List<Claim> claims = new()
             {
@@ -54,16 +67,27 @@ public class TokenService : ITokenService
 
             foreach (var role in roles)
             {
-                claims.Add(new Claim("Role", role));
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
+            var subject = new ClaimsIdentity(claims);
 
-            var jwtToken = new JwtSecurityToken(new JwtHeader(credentials), new JwtPayload(claims));
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = subject,
+                Expires = expires,
+                SigningCredentials = credentials,
+
+            };
+
+
+            //var jwtToken = new JwtSecurityToken(new JwtHeader(credentials), new JwtPayload(claims));
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var token = tokenHandler.WriteToken(jwtToken);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            //var token = tokenHandler.WriteToken(jwtToken);
 
-            return token;
+            return tokenHandler.WriteToken(token);
         }
         catch (Exception ex)
         {
@@ -75,7 +99,7 @@ public class TokenService : ITokenService
     {
         try
         {
-            var user = await _userService.GetUserAsync(tokenUserDTO.Email);
+            var user = await _userService.GetUserEmailAsync(tokenUserDTO.Email);
 
             if (user == null)
             {
@@ -103,20 +127,13 @@ public class TokenService : ITokenService
         }
     }
 
-    //    Call the JwtParser.CompareTokenClaims with the token and compareToken values and
-    //    store the result in a variable named success.
-    //    16. If success it false, call the GenerateTokenAsync method and pass it an instance of the
-    //    TokenDTO record with only the email to use the deafult true value for the other parameter
-    //    to save the token in the database. Store the returned token in the existing token varaible.
-    //17. Return an instance of the AuthenticatedUserDTO with token and user name.
-
     public async Task<AuthenticatedUserDTO> GetTokenAsync(LoginUserDTO loginUserDTO)
     {
         try
         {
             if (loginUserDTO == null) throw new UnauthorizedAccessException();
 
-            var user = await _userService.GetUserAsync(loginUserDTO.Email);
+            var user = await _userService.GetUserEmailAsync(loginUserDTO.Email);
 
             //bool isValidPassword = await _userManager.CheckPasswordAsync(user, loginUserDTO.Password);
 

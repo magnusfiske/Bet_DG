@@ -26,7 +26,7 @@ const Login = () => {
             const token = await getToken(loginFields.email, loginFields.password);
             const decoded = jwtDecode(token.accessToken);
             console.log(decoded);
-            handleLogin(token);
+            handleLogin(token.accessToken);
         } catch (error) {
             setError(error);
         }
@@ -38,8 +38,8 @@ const Login = () => {
         setRegister(!register);
     }
   
-    const handleLogin = (token) => {
-      setToken(token);
+    const handleLogin = (tokenFromApi) => {
+      setToken(tokenFromApi);
       navigate("/", { replace: true });
     };
   

@@ -3,6 +3,6 @@
     public interface IUserService
     {
         Task<BetUser> GetUserAsync(LoginUserDTO loginUser);
-        Task<BetUser> GetUserAsync(string email);
+        Task<BetUser> GetUserEmailAsync(string email);
     }
 }
