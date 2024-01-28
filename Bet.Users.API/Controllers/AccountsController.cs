@@ -7,18 +7,18 @@ using Microsoft.EntityFrameworkCore.Migrations.Operations;
 namespace Bet.Users.API.Controllers;
 
 [ApiController]
-public class UsersController : ControllerBase
+public class AccountsController : ControllerBase
 {
     private readonly UserManager<BetUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManger;
 
-    public UsersController(UserManager<BetUser> userManager, RoleManager<IdentityRole> roleManger)
+    public AccountsController(UserManager<BetUser> userManager, RoleManager<IdentityRole> roleManger)
     {
         _userManager = userManager;
         _roleManger = roleManger;
     }
 
-    [Route("api/users/seed")]
+    [Route("api/accounts/seed")]
     [HttpPost]
     public async Task<IResult> Seed()
     {
@@ -41,7 +41,7 @@ public class UsersController : ControllerBase
         return Results.BadRequest();
     }
 
-    [Route("api/users/register")]
+    [Route("api/accounts/register")]
     [HttpPost]
     public async Task<IResult> Register(RegisterUserDTO registerUserDTO)
     {
@@ -60,14 +60,14 @@ public class UsersController : ControllerBase
         return Results.BadRequest();
     }
 
-    [Route("api/users/paid")]
+    [Route("api/accounts/paid")]
     [HttpPost]
     public async Task<IResult> Paid(PaidCustomerDTO paidCustomerDTO)
     {
         return await AddRolesAsync(paidCustomerDTO.Email, new List<string> { UserRole.Customer });
     }
 
-    [Route("api/users/{email}")]
+    [Route("api/accounts/{email}")]
     [HttpGet]
     public async Task<IResult> GetResultAsync(string email)
     {

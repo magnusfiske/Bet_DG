@@ -3,6 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Bet.Users.Database.Contexts;
+using Bet.Users.Database.Entities;
+using Microsoft.AspNetCore.Identity;
+using Bet.API.Services;
+using Bet.Users.Database.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +26,11 @@ builder.Services.AddCors(policy => {
     );
 });
 
+builder.Services.AddIdentity<BetUser, IdentityRole>()
+ .AddRoles<IdentityRole>()
+ .AddEntityFrameworkStores<BetUserContext>()
+ .AddDefaultTokenProviders();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -28,13 +38,13 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(options =>
     {
-        var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:SigningSecret"]));//(Convert.FromBase64String(builder.Configuration["Jwt:SigningSecret"]));
+        var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:SigningSecret"]));
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidateLifetime = false,
+            ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = signingKey,
             ClockSkew = TimeSpan.Zero
@@ -53,6 +63,12 @@ builder.Services.AddDbContext<BetContext>(
     options =>
         options.UseSqlServer(
             builder.Configuration.GetConnectionString("BetConnection")));
+
+builder.Services.AddDbContext<BetUserContext>(
+    options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("BetUserConnection")));
+
 
 ConfigureAutomapper(builder.Services);
 RegisterServices(builder.Services);
@@ -102,4 +118,6 @@ void ConfigureAutomapper(IServiceCollection services)
 void RegisterServices(IServiceCollection services)
 {
     services.AddScoped<IDbService, DbService>();
+    services.AddScoped<IUserService, UserService>();
+    services.AddTransient<ITokenService, TokenService>();
 }

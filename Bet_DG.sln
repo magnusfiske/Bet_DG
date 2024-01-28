@@ -13,10 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.Common", "Bet.Common\Be
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.Users.Database", "Bet.Users.Database\Bet.Users.Database.csproj", "{9A486B5B-DB91-4586-B542-32334F60048D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.Users.API", "Bet.Users.API\Bet.Users.API.csproj", "{D175A551-507F-47B1-83D8-847F34CCBD34}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bet.Token.API", "Bet.Token.API\Bet.Token.API.csproj", "{720B6134-723F-4405-A07A-1FE7D282DCF8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,14 +41,6 @@ Global
 		{9A486B5B-DB91-4586-B542-32334F60048D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A486B5B-DB91-4586-B542-32334F60048D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A486B5B-DB91-4586-B542-32334F60048D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D175A551-507F-47B1-83D8-847F34CCBD34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D175A551-507F-47B1-83D8-847F34CCBD34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D175A551-507F-47B1-83D8-847F34CCBD34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D175A551-507F-47B1-83D8-847F34CCBD34}.Release|Any CPU.Build.0 = Release|Any CPU
-		{720B6134-723F-4405-A07A-1FE7D282DCF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{720B6134-723F-4405-A07A-1FE7D282DCF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{720B6134-723F-4405-A07A-1FE7D282DCF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{720B6134-723F-4405-A07A-1FE7D282DCF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

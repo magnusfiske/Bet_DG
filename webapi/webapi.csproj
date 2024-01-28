@@ -21,6 +21,8 @@
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
+	<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.12" />
+	<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.12" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.2.0" />
   </ItemGroup>
@@ -28,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Bet.Common\Bet.Common.csproj" />
     <ProjectReference Include="..\Bet.Data\Bet.Data.csproj" />
+    <ProjectReference Include="..\Bet.Users.Database\Bet.Users.Database.csproj" />
   </ItemGroup>
 
 </Project>
