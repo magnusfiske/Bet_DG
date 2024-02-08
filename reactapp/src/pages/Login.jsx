@@ -6,7 +6,8 @@ import { getToken } from '../services/tokenService';
 import Register from '../Register-component/Register';
 import { jwtDecode } from 'jwt-decode';
 
-const Login = () => {
+const Login = (props) => {
+    const [loggedIn, setLogedIn] = useState(props.loggedIn);
     const { setToken } = useAuth();
     const navigate = useNavigate();
     const [loginFields, setLoginFields] = useState({
@@ -15,9 +16,15 @@ const Login = () => {
     });
     const [register, setRegister] = useState(false);
     const [error, setError] = useState();
+    const [account, setAccount] = useState();
+
 
     const handleChange = (e) => {
         setLoginFields({...loginFields, [e.target.name]: e.target.value});
+    }
+
+    const tokenSetter = (token) => {
+        setToken(token);
     }
 
     const handleSubmit = async (e) => {
@@ -25,7 +32,7 @@ const Login = () => {
         try{
             const token = await getToken(loginFields.email, loginFields.password);
             const decoded = jwtDecode(token.accessToken);
-            console.log(decoded);
+            setAccount(decoded);
             handleLogin(token.accessToken);
         } catch (error) {
             setError(error);
@@ -40,36 +47,46 @@ const Login = () => {
   
     const handleLogin = (tokenFromApi) => {
       setToken(tokenFromApi);
-      navigate("/", { replace: true });
+        navigate("/", { replace: true });
     };
   
     return(
         <>
-            <form onSubmit={(e) => handleSubmit(e)}>
-                <div className='inputContainer email'>
-                    <label htmlFor='email'>epost </label>
-                    <input 
-                        type='text' 
-                        name='email'
-                        value={loginFields.email}
-                        onChange={handleChange}/>
-                </div>
-                <div className='inputContainer password'>
-                    <label htmlFor='password'>lösenord </label>
-                    <input 
-                        type='password' 
-                        name='password'
-                        value={loginFields.password}
-                        onChange={handleChange}/>
+        <div>
+            <div>
+                <h1>Tippa Allsvenskan</h1>
+                <h2>Djurgymnasiet</h2>
+            </div>
+        </div>
+            <div className='login'>
+            {!register &&
+                <form onSubmit={(e) => handleSubmit(e)}>
+                    <div className='input-container email'>
+                        <label htmlFor='email'>Epost </label>
+                        <input 
+                            type='text' 
+                            name='email'
+                            value={loginFields.email}
+                            onChange={handleChange}/>
                     </div>
-                <div className='buttonContainer'>
-                    <button type='submit'>Login</button>
-                </div>
-            </form>
-            <button type='button' onClick={(e) => toggleRegister(e)}>New user</button>
-            {register && 
-                <Register />
-            }
+                    <div className='input-container password'>
+                        <label htmlFor='password'>Lösenord </label>
+                        <input 
+                            type='password' 
+                            name='password'
+                            value={loginFields.password}
+                            onChange={handleChange}/>
+                        </div>
+                    <div className='button-container'>
+                        <button className='login-btn' type='submit'>Logga in</button>
+                    </div>
+                </form> 
+                }
+                {register && 
+                    <Register setToken={tokenSetter}/>
+                }
+                <button className='toggle login-btn' type='button' onClick={(e) => toggleRegister(e)}>{register ? 'Har konto?' : 'Ny användare?'}</button>
+            </div>
         </>
     );
   };

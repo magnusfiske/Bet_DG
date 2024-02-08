@@ -3,16 +3,19 @@ using Bet.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Bet.Data.Migrations
+namespace Bet.Data.Migrations.BetMigrations
 {
     [DbContext(typeof(BetContext))]
-    partial class BetContextModelSnapshot : ModelSnapshot
+    [Migration("20240206121715_teamNames_prevPosition")]
+    partial class teamNames_prevPosition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,8 @@ namespace Bet.Data.Migrations
 
                     b.HasIndex("BetId");
 
-                    b.HasIndex("TeamId");
+                    b.HasIndex("TeamId")
+                        .IsUnique();
 
                     b.ToTable("BetRows");
                 });
@@ -132,7 +136,7 @@ namespace Bet.Data.Migrations
                         new
                         {
                             Id = 7,
-                            Name = "IFK Norrköping FK",
+                            Name = "IFK Norrköping",
                             Position = 0,
                             PreviousPosition = 0
                         },
@@ -167,7 +171,7 @@ namespace Bet.Data.Migrations
                         new
                         {
                             Id = 12,
-                            Name = "Halmstad",
+                            Name = "Hamlstad",
                             Position = 0,
                             PreviousPosition = 0
                         },
@@ -195,7 +199,7 @@ namespace Bet.Data.Migrations
                         new
                         {
                             Id = 16,
-                            Name = "Varbergs BoIS FC",
+                            Name = "Varberg BoIS FC",
                             Position = 0,
                             PreviousPosition = 0
                         });
@@ -246,8 +250,8 @@ namespace Bet.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Bet.Data.Entities.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId")
+                        .WithOne("BetRow")
+                        .HasForeignKey("Bet.Data.Entities.BetRow", "TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -259,6 +263,11 @@ namespace Bet.Data.Migrations
             modelBuilder.Entity("Bet.Data.Entities.Bet", b =>
                 {
                     b.Navigation("BetRows");
+                });
+
+            modelBuilder.Entity("Bet.Data.Entities.Team", b =>
+                {
+                    b.Navigation("BetRow");
                 });
 
             modelBuilder.Entity("Bet.Data.Entities.User", b =>

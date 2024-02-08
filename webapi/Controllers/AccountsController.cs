@@ -1,4 +1,5 @@
-﻿using Bet.Common.Classes;
+﻿using Bet.API.Services;
+using Bet.Common.Classes;
 using Bet.Common.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,32 +12,36 @@ public class AccountsController : ControllerBase
 {
     private readonly UserManager<BetUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManger;
+    private readonly IDbService _db;
+    private readonly ITokenService _tokenService;
 
-    public AccountsController(UserManager<BetUser> userManager, RoleManager<IdentityRole> roleManger)
+    public AccountsController(UserManager<BetUser> userManager, RoleManager<IdentityRole> roleManger, IDbService db, ITokenService tokenService)
     {
         _userManager = userManager;
         _roleManger = roleManger;
+        _db = db;
+        _tokenService = tokenService;
     }
 
     [Route("api/accounts/seed")]
     [HttpPost]
     public async Task<IResult> Seed()
     {
-        try
-        {
-            await _roleManger.CreateAsync(new IdentityRole { Id = "1", Name = UserRole.Admin });
-            await _roleManger.CreateAsync(new IdentityRole { Id = "2", Name = UserRole.Customer });
-            await _roleManger.CreateAsync(new IdentityRole { Id = "3", Name = UserRole.Registered });
+        //try
+        //{
+        //    await _roleManger.CreateAsync(new IdentityRole { Id = "1", Name = UserRole.Admin });
+        //    await _roleManger.CreateAsync(new IdentityRole { Id = "2", Name = UserRole.Customer });
+        //    await _roleManger.CreateAsync(new IdentityRole { Id = "3", Name = UserRole.Registered });
 
-            await AddUserAsync("raspen@bet.com", "Pass123__");
-            await AddUserAsync("sylve@bulk.com", "Pass123__");
+        //    await AddUserAsync("raspen@bet.com", "Pass123__");
+        //    await AddUserAsync("sylve@bulk.com", "Pass123__");
 
-            await AddRolesAsync("raspen@bet.com", new List<string> { UserRole.Admin, UserRole.Registered, UserRole.Customer });
-            await AddRolesAsync("sylve@bulk.com", new List<string> {UserRole.Registered, UserRole.Customer });
+        //    await AddRolesAsync("raspen@bet.com", new List<string> { UserRole.Admin, UserRole.Registered, UserRole.Customer });
+        //    await AddRolesAsync("sylve@bulk.com", new List<string> {UserRole.Registered, UserRole.Customer });
 
-            return Results.Ok();
-        }
-        catch { }
+        //    return Results.Ok();
+        //}
+        //catch { }
 
         return Results.BadRequest();
     }
@@ -53,7 +58,24 @@ public class AccountsController : ControllerBase
             result = await AddRolesAsync(registerUserDTO.Email, registerUserDTO.Roles);
             if (result.Equals(Results.BadRequest())) return Results.BadRequest();
 
-            return Results.Ok();
+            var user = await _userManager.FindByEmailAsync(registerUserDTO.Email);
+
+            var id = user.Id ?? throw new ArgumentNullException(nameof(user));
+
+            var success = await AddUserAsync(new UserDTO
+            {
+                Name = registerUserDTO.Name,
+                AspNetUserId = id,
+            });
+            if (success.Equals(Results.BadRequest()))
+            {
+                return Results.BadRequest();
+            }
+            else
+            {
+                var token = _tokenService.CreateToken(registerUserDTO.Roles, user);
+                return Results.Ok(token);
+            }
         }
         catch { }
 
@@ -118,6 +140,25 @@ public class AccountsController : ControllerBase
         }
         catch { }
 
+        return Results.BadRequest();
+    }
+
+    private async Task<IResult> AddUserAsync(UserDTO dto)
+    {
+        try
+        {
+            var entity = await _db.AddAsync<User, UserDTO>(dto);
+            if (await _db.SaveChangesAsync())
+            {
+                var node = typeof(User).Name.ToLower();
+                return Results.Created($"/{node}s/{entity.Id}", entity);
+            }
+        }
+        catch (Exception ex)
+        {
+            return Results.BadRequest($"Couldn't add the {typeof(User).Name} " +
+                $"entity.\n{ex}.");
+        }
         return Results.BadRequest();
     }
 }

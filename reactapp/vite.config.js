@@ -31,19 +31,16 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/teams': {
-                target: 'http://localhost:5120/',
-                secure: false
+            '/api': {
+                target: 'https://localhost:7175',
+                secure: false,
+                changeOrigin: true
             },
-            '^/api/users/register': {
-                target: 'https://localhost:5501/',
-                secure: true
-            }
         },
         port: 5173,
-        // https: {
-        //     key: fs.readFileSync(keyFilePath),
-        //     cert: fs.readFileSync(certFilePath),
-        // }
+        https: {
+            key: fs.readFileSync(keyFilePath),
+            cert: fs.readFileSync(certFilePath),
+        }
     }
 })

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bet.API.Controllers;
 
-[Authorize]
+
 [Route("api/[controller]")]
 [ApiController]
 public class BetController : ControllerBase
@@ -46,8 +46,8 @@ public class BetController : ControllerBase
         {
             _db.Include<Data.Entities.Bet>();
             _db.Include<BetRow>();
-            var results = await _db.SingleAsync<Data.Entities.Bet, BetDTO>(e => e.Id.Equals(id));
-            return results != null ? Results.Ok(results) : Results.NotFound();
+            var results = await _db.SingleAsync<Data.Entities.Bet, BetDTO>(e => e.UserId.Equals(id));
+            return results != null ? Results.Ok(results) : Results.NotFound(new BetDTO());
         }
         catch (Exception ex)
         {

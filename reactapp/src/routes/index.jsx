@@ -6,6 +6,8 @@ import Logout from "../pages/Logout";
 import Register from "../Register-component/Register";
 import Start from "../pages/Start";
 import UserPage from "../pages/UserPage";
+import TableContainer from "../pages/TableContainer";
+import Table from "../components/Table";
 
 
 const Routes = () => {
@@ -30,7 +32,12 @@ const Routes = () => {
                 {
                     path: "/",
                     element: <UserPage />, 
-                    // loader: userPageLoader,
+                    children: [
+                        {
+                            path: "/bet",
+                            element: <TableContainer />,
+                        }
+                    ]
                 },
                 {
                     path: "/profile",
@@ -46,18 +53,28 @@ const Routes = () => {
 
     const routesForNotAuthenticatedOnly = [
         {
-            path: "/",
-            element: <Start />,
-        },
-        {
             path: "/login",
-            element: <Login />,
+            element: <Start />,
             children: [
-            {
-                path: "/login/register",
-                element: <Register />,
-            }],
-        },
+                {
+                    element: <Login loggedIn={false} />,
+                    children: [
+                        {
+                            element: <Register />
+                        }
+                    ]
+                }
+            ]
+        }
+        // {
+        //     path: "/login",
+        //     element: <Login />,
+        //     children: [
+        //     {
+        //         path: "/login/register",
+        //         element: <Register />,
+        //     }],
+        // },
     ];
 
     const router = createBrowserRouter([

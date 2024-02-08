@@ -22,6 +22,8 @@ public class BetContext : DbContext
 	{
 		base.OnModelCreating(builder);
 		SeedData(builder);
+        //builder.Entity<BetRow>().HasOne<Team>(b => b.Team).WithMany<Team>(t => t.BetRow);
+        //builder.Entity<BetRow>().HasOne<Entities.Bet>().WithMany();
 	}
 
 	private void SeedData(ModelBuilder builder)
@@ -30,7 +32,7 @@ public class BetContext : DbContext
         {
             new Team {
                 Id = 1,
-                Name = "Hammarby IF"
+                Name = "Hammarby"
             },
             new Team {
                 Id = 2,
@@ -54,7 +56,7 @@ public class BetContext : DbContext
             },
             new Team {
                 Id = 7,
-                Name = "IFK Norrköping"
+                Name = "IFK Norrköping FK"
             },
             new Team {
                 Id = 8,
@@ -62,7 +64,7 @@ public class BetContext : DbContext
             },
             new Team {
                 Id = 9,
-                Name = "IK Sirius"
+                Name = "IK Sirius FK"
             },
             new Team {
                 Id = 10,
@@ -74,7 +76,7 @@ public class BetContext : DbContext
             },
             new Team {
                 Id = 12,
-                Name = "Hamlstad BK"
+                Name = "Halmstad"
             },
             new Team {
                 Id = 13,
@@ -86,11 +88,11 @@ public class BetContext : DbContext
             },
             new Team {
                 Id = 15,
-                Name = "Degerfors IF"
+                Name = "GAIS"
             },
             new Team {
                 Id = 16,
-                Name = "Varberg BoIS"
+                Name = "Västerås SK FK"
             }
         };
 

@@ -3,16 +3,19 @@ using Bet.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Bet.Data.Migrations
+namespace Bet.Data.Migrations.BetMigrations
 {
     [DbContext(typeof(BetContext))]
-    partial class BetContextModelSnapshot : ModelSnapshot
+    [Migration("20240131210944_returnTeamsData")]
+    partial class returnTeamsData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,8 @@ namespace Bet.Data.Migrations
 
                     b.HasIndex("BetId");
 
-                    b.HasIndex("TeamId");
+                    b.HasIndex("TeamId")
+                        .IsUnique();
 
                     b.ToTable("BetRows");
                 });
@@ -79,9 +83,6 @@ namespace Bet.Data.Migrations
                     b.Property<int>("Position")
                         .HasColumnType("int");
 
-                    b.Property<int>("PreviousPosition")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Teams");
@@ -90,114 +91,98 @@ namespace Bet.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Hammarby",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Name = "Hammarby IF",
+                            Position = 0
                         },
                         new
                         {
                             Id = 2,
                             Name = "Malmö FF",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 3,
                             Name = "IF Elfsborg",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 4,
                             Name = "BK Häcken",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 5,
                             Name = "Djurgården",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 6,
                             Name = "Kalmar FF",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 7,
-                            Name = "IFK Norrköping FK",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Name = "IFK Norrköping",
+                            Position = 0
                         },
                         new
                         {
                             Id = 8,
                             Name = "IFK Värnamo",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 9,
-                            Name = "IK Sirius FK",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Name = "IK Sirius",
+                            Position = 0
                         },
                         new
                         {
                             Id = 10,
                             Name = "Mjällby AIF",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 11,
                             Name = "AIK",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 12,
-                            Name = "Halmstad",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Name = "Hamlstad BK",
+                            Position = 0
                         },
                         new
                         {
                             Id = 13,
                             Name = "IFK Göteborg",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 14,
                             Name = "IF Brommapojkarna",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 15,
                             Name = "Degerfors IF",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Position = 0
                         },
                         new
                         {
                             Id = 16,
-                            Name = "Varbergs BoIS FC",
-                            Position = 0,
-                            PreviousPosition = 0
+                            Name = "Varberg BoIS",
+                            Position = 0
                         });
                 });
 
@@ -246,8 +231,8 @@ namespace Bet.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Bet.Data.Entities.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId")
+                        .WithOne("BetRow")
+                        .HasForeignKey("Bet.Data.Entities.BetRow", "TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -259,6 +244,11 @@ namespace Bet.Data.Migrations
             modelBuilder.Entity("Bet.Data.Entities.Bet", b =>
                 {
                     b.Navigation("BetRows");
+                });
+
+            modelBuilder.Entity("Bet.Data.Entities.Team", b =>
+                {
+                    b.Navigation("BetRow");
                 });
 
             modelBuilder.Entity("Bet.Data.Entities.User", b =>

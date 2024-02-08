@@ -27,7 +27,7 @@ public static class Webscraper
 
         try
         {
-            var document = web.Load("https://www.svenskfotboll.se/serier-cuper/tabell-och-resultat/allsvenskan-2023/101999/");
+            var document = web.Load("https://www.svenskfotboll.se/serier-cuper/tabell-och-resultat/allsvenskan-2024/115560/");
 
             var teamHTMLElements = document.DocumentNode.QuerySelectorAll("tr.standings-table__row");
 

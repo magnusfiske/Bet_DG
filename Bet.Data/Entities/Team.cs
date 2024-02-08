@@ -15,5 +15,6 @@ public class Team : IEntity
 
     public int Position { get; set; }
 
-    public virtual BetRow? BetRow { get; set; }
+    public int PreviousPosition { get; set; }
+
 }

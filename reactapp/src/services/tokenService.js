@@ -2,14 +2,14 @@
 
 export const getToken = async (email, password) => {
     const requestOptions = {
-        method: 'POST', 
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({"email": email,
         "password": password
         })
     }
 
-    const response = await fetch('https://localhost:5001/api/token/', requestOptions)
+    const response = await fetch('/api/token', requestOptions)
     if (response.ok) {
         console.log(response);
         return response.json();
@@ -21,7 +21,6 @@ export const getToken = async (email, password) => {
         console.log(response);
         throw new Error('Unexpected error')
     }
-    
 }
 
 const extractToken = (response) => {

@@ -12,4 +12,6 @@ public record TeamDTO
     public string? Name { get; set; }
 
     public int? Position { get; set; }
+
+    public int? PreviousPosition { get; set; }
 }

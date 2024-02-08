@@ -23,6 +23,15 @@ public class UsersController : ControllerBase
         return Results.Ok(await _db.GetAsync<User, UserDTO>());
     }
 
+    [Route("userId/{AspNetUserId}")]
+    [HttpGet]
+    public async Task<IResult> Get(string AspNetUserId)
+    {
+        _db.Include<User>();
+        var results = await _db.SingleAsync<User, UserDTO>(e => e.AspNetUserId.Equals(AspNetUserId));
+        return results != null ? Results.Ok(results) : Results.NotFound();
+    }
+
     // GET api/<UsersController>/5
     [HttpGet("{id}")]
     public async Task<IResult> Get(int id)

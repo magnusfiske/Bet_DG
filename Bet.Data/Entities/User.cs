@@ -17,5 +17,7 @@ public class User : IEntity
 
     public bool Submited { get; set; }
 
+    public string? AspNetUserId { get; set; }
+
     public virtual ICollection<Bet>? Bets { get; set; }
 }

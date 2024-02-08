@@ -15,5 +15,7 @@ public record UserDTO
 
     public bool Submited { get; set; }
 
+    public string? AspNetUserId { get; set; }
+
     public virtual List<int>? Bets { get; set; }
 }

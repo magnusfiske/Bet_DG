@@ -27,6 +27,11 @@ public interface IDbService
 
     void Update<TEntity, TDto>(int id, TDto dto) where TEntity : class, IEntity
         where TDto : class;
+    void UpdateRange<TEntity, TDto>(TDto[] dto) where TEntity : class, IEntity
+     where TDto : class;
 
     Task<bool> DeleteAsync<TEntity>(int id) where TEntity : class, IEntity;
+    Task<List<TEntity>> AddRangeAsync<TEntity, TDto>(TDto[] dtos)
+        where TEntity : class
+        where TDto : class;
 }

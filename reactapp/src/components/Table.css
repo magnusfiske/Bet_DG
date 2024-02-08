@@ -1,0 +1,26 @@
+.table-container {
+    background-color: green;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+table {
+    width: 30vw;
+
+}
+
+.table-row {
+    border-style: solid;
+    border-color: black;
+    border: 1px;
+    background-color: white;
+}
+
+thead td {
+    color: white;
+}
+
+.cell-name {
+    text-align: left;
+    padding-left: 5px;
+}

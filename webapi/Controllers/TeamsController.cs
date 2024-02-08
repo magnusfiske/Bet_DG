@@ -7,7 +7,7 @@ using webapi;
 
 namespace Bet.API.Controllers;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class TeamsController : ControllerBase
 {

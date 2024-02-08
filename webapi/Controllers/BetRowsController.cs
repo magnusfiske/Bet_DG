@@ -31,37 +31,77 @@ public class BetRowsController : ControllerBase
     }
 
     // POST api/<BetRowsController>
+    //[HttpPost]
+    //public async Task<IResult> Post([FromBody] BetRowDTO dto)
+    //{
+    //    try
+    //    {
+    //        var entity = await _db.AddAsync<BetRow, BetRowDTO>(dto);
+    //        if (await _db.SaveChangesAsync())
+    //        {
+    //            var node = typeof(BetRow).Name.ToLower();
+    //            return Results.Created($"/{node}s/{entity.Id}", entity);
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return Results.BadRequest($"Couldn't add the {typeof(BetRow).Name} " +
+    //            $"entity.\n{ex}.");
+    //    }
+
+    //    return Results.BadRequest();
+    //}
+
     [HttpPost]
-    public async Task<IResult> Post([FromBody] BetRowDTO dto)
+    public async Task<IResult> PostTable([FromBody] List<BetRowDTO> dtos)
     {
         try
         {
-            var entity = await _db.AddAsync<BetRow, BetRowDTO>(dto);
+            var entities = await _db.AddRangeAsync<BetRow, BetRowDTO>(dtos.ToArray());
             if (await _db.SaveChangesAsync())
             {
                 var node = typeof(BetRow).Name.ToLower();
-                return Results.Created($"/{node}s/{entity.Id}", entity);
+                return Results.Created($"/{node}s/{entities[0].Id} - {entities[entities.Count() - 1].Id}", entities);
             }
         }
         catch (Exception ex)
         {
             return Results.BadRequest($"Couldn't add the {typeof(BetRow).Name} " +
-                $"entity.\n{ex}.");
+                $"entities.\n{ex}.");
         }
-
         return Results.BadRequest();
     }
 
     // PUT api/<BetRowsController>/5
-    [HttpPut("{id}")]
-    public async Task<IResult> Put(int id, [FromBody] BetRowDTO dto)
+    //[HttpPut("{id}")]
+    //public async Task<IResult> Put(int id, [FromBody] BetRowDTO dto)
+    //{
+    //    try
+    //    {
+    //        if (!await _db.AnyAsync<BetRow>(e => e.Id.Equals(id)))
+    //            return Results.NotFound();
+
+    //        _db.Update<BetRow, BetRowDTO>(id, dto);
+
+    //        if (await _db.SaveChangesAsync())
+    //            return Results.NoContent();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return Results.BadRequest($"Couldn´t update the {typeof(BetRow).Name} entity. \n {ex}");
+    //    }
+    //    return Results.BadRequest($"Couldn´t update the {typeof(BetRow).Name} entity. \n");
+    //}
+
+    [HttpPut("{betId}")]
+    public async Task<IResult> UpdateTable(int betId, [FromBody] BetRowDTO[] dtos)
     {
         try
         {
-            if (!await _db.AnyAsync<BetRow>(e => e.Id.Equals(id)))
+            if (!await _db.AnyAsync<BetRow>(e => e.BetId.Equals(betId)))
                 return Results.NotFound();
 
-            _db.Update<BetRow, BetRowDTO>(id, dto);
+            _db.UpdateRange<BetRow, BetRowDTO>(dtos);
 
             if (await _db.SaveChangesAsync())
                 return Results.NoContent();

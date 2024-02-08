@@ -58,6 +58,20 @@ public class DbService : IDbService
         return entity;
     }
 
+    public async Task<List<TEntity>> AddRangeAsync<TEntity, TDto>(TDto[] dtos) 
+        where TEntity : class 
+        where TDto : class
+    {
+        var entities = new List<TEntity>();
+        foreach(var dto in dtos)
+        {
+            var entity = _mapper.Map<TEntity>(dto);
+            entities.Add(entity);
+        }
+        await _db.AddRangeAsync(entities.ToArray());
+        return entities;
+    }
+
     public void Include<TEntity>() where TEntity : class, IEntity
     {
         var propertyNames =
@@ -75,6 +89,17 @@ public class DbService : IDbService
         var entity = _mapper.Map<TEntity>(dto);
         entity.Id = id;
         _db.Set<TEntity>().Update(entity);
+    }
+
+    void IDbService.UpdateRange<TEntity, TDto>(TDto[] dtos)
+    {
+        var entities = new List<TEntity>();
+        foreach (var dto in dtos)
+        {
+            var entity = _mapper.Map<TEntity>(dto);
+            entities.Add(entity);
+        }
+        _db.Set<TEntity>().UpdateRange(entities);
     }
 
     async Task<bool> IDbService.DeleteAsync<TEntity>(int id)
