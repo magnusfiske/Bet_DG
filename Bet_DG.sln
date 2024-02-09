@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.Data", "Bet.Data\Bet.Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.Common", "Bet.Common\Bet.Common.csproj", "{B2B92E62-9E2A-4328-9A93-7933699C7657}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bet.Users.Database", "Bet.Users.Database\Bet.Users.Database.csproj", "{9A486B5B-DB91-4586-B542-32334F60048D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,10 +35,6 @@ Global
 		{B2B92E62-9E2A-4328-9A93-7933699C7657}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2B92E62-9E2A-4328-9A93-7933699C7657}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2B92E62-9E2A-4328-9A93-7933699C7657}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A486B5B-DB91-4586-B542-32334F60048D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A486B5B-DB91-4586-B542-32334F60048D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A486B5B-DB91-4586-B542-32334F60048D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A486B5B-DB91-4586-B542-32334F60048D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

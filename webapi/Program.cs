@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Bet.Users.Database.Contexts;
-using Bet.Users.Database.Entities;
+using Bet.Data.Contexts;
+using Bet.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Bet.API.Services;
-using Bet.Users.Database.Services;
+using Bet.Data.Services;
+using BetUser = Bet.Data.Entities.BetUser;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,7 @@ builder.Services.AddCors(policy => {
 
 builder.Services.AddIdentity<BetUser, IdentityRole>()
  .AddRoles<IdentityRole>()
- .AddEntityFrameworkStores<BetUserContext>()
+ .AddEntityFrameworkStores<BetContext>()
  .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
@@ -64,10 +65,10 @@ builder.Services.AddDbContext<BetContext>(
         options.UseSqlServer(
             builder.Configuration.GetConnectionString("BetConnection")));
 
-builder.Services.AddDbContext<BetUserContext>(
-    options =>
-        options.UseSqlServer(
-            builder.Configuration.GetConnectionString("BetUserConnection")));
+//builder.Services.AddDbContext<BetUserContext>(
+//    options =>
+//        options.UseSqlServer(
+//            builder.Configuration.GetConnectionString("BetUserConnection")));
 
 
 ConfigureAutomapper(builder.Services);

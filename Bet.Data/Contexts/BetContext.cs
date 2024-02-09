@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bet.Data.Contexts;
 
-public class BetContext : DbContext
+public class BetContext : IdentityDbContext<BetUser>
 {
 	public BetContext(DbContextOptions<BetContext> options) 
 		: base(options) {}
@@ -16,14 +16,13 @@ public class BetContext : DbContext
 	public DbSet<Entities.Bet> Bets => Set<Entities.Bet>();
 	public DbSet<BetRow> BetRows => Set<BetRow>();
 	public DbSet<Team> Teams => Set<Team>();
-	public DbSet<User> Users => Set<User>();
+	//public DbSet<User> Users => Set<User>();
 
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
 		base.OnModelCreating(builder);
 		SeedData(builder);
-        //builder.Entity<BetRow>().HasOne<Team>(b => b.Team).WithMany<Team>(t => t.BetRow);
-        //builder.Entity<BetRow>().HasOne<Entities.Bet>().WithMany();
+
 	}
 
 	private void SeedData(ModelBuilder builder)

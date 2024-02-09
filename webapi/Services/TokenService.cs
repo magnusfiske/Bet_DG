@@ -1,6 +1,6 @@
 ﻿using Bet.Common.DTOs;
-using Bet.Users.Database.Entities;
-using Bet.Users.Database.Services;
+using Bet.Data.Entities;
+using Bet.Data.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

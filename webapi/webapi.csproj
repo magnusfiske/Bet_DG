@@ -30,7 +30,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Bet.Common\Bet.Common.csproj" />
     <ProjectReference Include="..\Bet.Data\Bet.Data.csproj" />
-    <ProjectReference Include="..\Bet.Users.Database\Bet.Users.Database.csproj" />
   </ItemGroup>
 
 </Project>

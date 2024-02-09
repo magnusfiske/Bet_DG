@@ -27,21 +27,21 @@ public class AccountsController : ControllerBase
     [HttpPost]
     public async Task<IResult> Seed()
     {
-        //try
-        //{
-        //    await _roleManger.CreateAsync(new IdentityRole { Id = "1", Name = UserRole.Admin });
-        //    await _roleManger.CreateAsync(new IdentityRole { Id = "2", Name = UserRole.Customer });
-        //    await _roleManger.CreateAsync(new IdentityRole { Id = "3", Name = UserRole.Registered });
+        try
+        {
+            await _roleManger.CreateAsync(new IdentityRole { Id = "1", Name = UserRole.Admin });
+            await _roleManger.CreateAsync(new IdentityRole { Id = "2", Name = UserRole.Customer });
+            await _roleManger.CreateAsync(new IdentityRole { Id = "3", Name = UserRole.Registered });
 
-        //    await AddUserAsync("raspen@bet.com", "Pass123__");
-        //    await AddUserAsync("sylve@bulk.com", "Pass123__");
+            //await AddUserAsync("raspen@bet.com", "Pass123__");
+            //await AddUserAsync("sylve@bulk.com", "Pass123__");
 
-        //    await AddRolesAsync("raspen@bet.com", new List<string> { UserRole.Admin, UserRole.Registered, UserRole.Customer });
-        //    await AddRolesAsync("sylve@bulk.com", new List<string> {UserRole.Registered, UserRole.Customer });
+            //await AddRolesAsync("raspen@bet.com", new List<string> { UserRole.Admin, UserRole.Registered, UserRole.Customer });
+            //await AddRolesAsync("sylve@bulk.com", new List<string> { UserRole.Registered, UserRole.Customer });
 
-        //    return Results.Ok();
-        //}
-        //catch { }
+            return Results.Ok();
+        }
+        catch { }
 
         return Results.BadRequest();
     }

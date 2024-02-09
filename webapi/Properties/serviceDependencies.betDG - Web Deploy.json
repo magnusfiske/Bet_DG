@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/betDG/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsBetConnection_F9E2DB3E23",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/betdgdbserver/databases/betDG_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:BetConnection",
+      "dynamicId": null
+    }
+  }
+}
