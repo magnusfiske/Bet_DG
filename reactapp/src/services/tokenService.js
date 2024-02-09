@@ -11,7 +11,6 @@ export const getToken = async (email, password) => {
 
     const response = await fetch('/api/token', requestOptions)
     if (response.ok) {
-        console.log(response);
         return response.json();
     }
     if (response.status === 402) {

@@ -30,7 +30,6 @@ export default function TableContainer(props) {
             console.log(error);
             const response = await axios.get('/api/teams');
                 const data = await response.data.sort((a,b) => a.position - b.position);
-                console.log(data);
                 var emptyBetRows = data.map(team => ({
                     betId: 0,
                     id : 0,

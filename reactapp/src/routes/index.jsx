@@ -7,7 +7,7 @@ import Register from "../Register-component/Register";
 import Start from "../pages/Start";
 import UserPage from "../pages/UserPage";
 import TableContainer from "../pages/TableContainer";
-import Table from "../components/Table";
+
 
 
 const Routes = () => {
@@ -34,7 +34,7 @@ const Routes = () => {
                     element: <UserPage />, 
                     children: [
                         {
-                            path: "/bet",
+                            path: "/UserPage",
                             element: <TableContainer />,
                         }
                     ]

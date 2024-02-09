@@ -33,7 +33,7 @@ const Login = (props) => {
             const token = await getToken(loginFields.email, loginFields.password);
             const decoded = jwtDecode(token.accessToken);
             setAccount(decoded);
-            handleLogin(token.accessToken);
+            handleLogin(token.accessToken, decoded);
         } catch (error) {
             setError(error);
         }
@@ -45,9 +45,9 @@ const Login = (props) => {
         setRegister(!register);
     }
   
-    const handleLogin = (tokenFromApi) => {
-      setToken(tokenFromApi);
-        navigate("/", { replace: true });
+    const handleLogin = (tokenFromApi, decodedToken) => {
+        setToken(tokenFromApi);
+        navigate('/UserPage', { replace: true });
     };
   
     return(

@@ -1,19 +1,17 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
 import React, {useEffect, useState} from "react"
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode';
 import TableContainer from "./TableContainer";
 import './UserPage.css'
-
+import LoaderSpinner from "../components/LoaderSpinner";
 
 
 export default function UserPage() {
     const { token } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState();
-    const [betId, setBetId] = useState();
-    const [betRows, setBetRows] = useState();
     
 
     const handleLoad = () => {
@@ -32,133 +30,51 @@ export default function UserPage() {
         const aspNetUserId = decodedToken.jti;
         const response = await axios.get('/api/Users/userId/' + aspNetUserId);
         setUser(await response.data);
-        // try {
-        //     var betResponse = await axios.get(`/api/Bet/${response.data.id}`);
-        //     if (betResponse.status === 200) {
-        //         const sortedRows = betResponse.data.betRows.sort((a,b) => a.placing - b.placing);
-        //         setBetRows(sortedRows);
-        //         setBetId(betResponse.data.id);
-        //     } 
-        // } catch (error) {
-        //     console.log(error);
-        //     const response = await axios.get('/api/teams');
-        //         const data = await response.data.sort((a,b) => a.position - b.position);
-        //         console.log(data);
-        //         var emptyBetRows = data.map(team => ({
-        //             betId: 0,
-        //             id : 0,
-        //             placing : 0,
-        //             teamId : 0,
-        //             team : {
-        //                 id : team.id,
-        //                 name : team.name,
-        //                 position : team.position,
-        //                 previousPosition : team.previousPosition,
-        //             }
-        //         }));
-        //         setBetRows(emptyBetRows);
-        // }
     }
-
-    // const populateTeamsData = async() => {
-    //     try {
-    //         const response = await axios.get('/api/teams');
-    //         const data = await response.data.sort((a,b) => a.position - b.position);
-    //         setTeams(data);
-    //     } catch (error) {
-    //         return;
-    //     }
-    // };
 
     const navigate = useNavigate();
 
     const handleLogout = () => {
         navigate("/logout", {replace: true});
     }
-
-    // const onDragEnd = (result) => {
-    //     const { destination, source, draggableId } = result;
-
-    //     if(!destination){
-    //         return;
-    //     }
-
-    //     if (
-    //         destination.droppableId === source.droppableId &&
-    //         destination.index === source.index
-    //     ) {
-    //         return;
-    //     }
-
-    //     const tableItems = [...betRows];
-    //     const [draggedItem] = tableItems.splice(result.source.index, 1);
-    //     tableItems.splice(result.destination.index, 0, draggedItem);
-
-    //     tableItems.map((item) => {
-    //         item.placing = tableItems.indexOf(item)+1;
-    //     });
-
-    //     setBetRows(tableItems);
-    // };
-
-    // const handleSave = async() => {
-    //     if(betId == null) {
-    //         const postBetResponse = await axios({
-    //             method: 'post',
-    //             url: '/api/bet',
-    //             data: {
-    //                 UserID: user.id
-    //             }
-    //         });
-    //         var data = await postBetResponse.data;
-    //         setBetId(data.id);
-    //     }
-
-    //     if(betRows.some(row => row.id === 0)) {
-    //         var newBetRows = [];
-    //         betRows.map((betRow) => newBetRows.push({'betId': betId ?? data.id, 'placing': (betRows.indexOf(betRow)+1), 'teamId': betRow.team.id}));
-    //         try {
-    //             const response = await axios({
-    //                 method: 'post',
-    //                 url: '/api/BetRows',
-    //                 data: newBetRows,
-    //             });
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     } else {
-    //         try {
-    //             const response = await axios({
-    //                 method: 'put',
-    //                 url: `/api/BetRows/${betId}`,
-    //                 data: betRows
-    //             });
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     }
-    // }
+    
 
     return (
         <>
             <header>
-                <div className="header-user">
-                    <p>inloggad som {user.name}</p>
+                <div className="navigation">
+                    <Link to="/">länk</Link>
+                    <Link to="/">länk</Link>
                 </div>
-                <button type="button" onClick={handleLogout}>Logga ut</button>
+                <div className="header-end">
+                    <div className="header-user">
+                        {user && <p>inloggad som {user.name}</p>}
+                    </div>
+                    <button type="button" onClick={handleLogout}>Logga ut</button>
+                </div>
             </header>
             <main>
-                {user && <TableContainer user={user} />}
+            {!user ? (
+                <div>
+                <LoaderSpinner wrapperClass="user-loader"/> 
+                </div>) : (
+                <div className="main-container">
+                    <article>
+                        <TableContainer user={user} />
+                    </article>
+                    <aside>
+                        <div className="info">
+                            <p>Dra och släpp lagen för att placera dem i den ordning du tror de kommer vara i när allsvenskan 2024 är färdigspelad.</p>
+                            <p>Närmast vinner!</p>
+                            <p>Du kan när som helst trycka på 'spara rad' för att fortsätta senare.</p>
+                        </div>
+                        <div className="status">
+                            <p>Lämnat in: {user.submited ? "ja" : "nej"}</p>
+                            <p>Betalat: {user.paid ? "ja" : "nej"}</p>
+                        </div>
+                    </aside>
+                </div>)}
             </main>
-            {/* <DragDropContext
-                onDragEnd={onDragEnd}>
-
-                {betRows ? <Table betRows={betRows} /> : null
-                }
-
-            </DragDropContext>
-
-            <button type="button" onClick={handleSave}>spara rad</button> */}
         </>
     );
 }

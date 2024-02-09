@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bet.API.Controllers;
 
-
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class BetController : ControllerBase

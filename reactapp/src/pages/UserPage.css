@@ -3,23 +3,56 @@ header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 1rem;
-    background-color: rgba(86, 85, 85, 0.9);
+    background-color: rgba(248, 250, 253, 0.9);
     border-radius: 5px;
-    p {
-        color:azure;
-    }
+    
     button {
-        margin-left: 1rem;
+        margin-left: 1.5rem;
+    }
+    .header-end {
+        display:flex;
+        align-items: center;
+    }
+    .navigation {
+        display: flex;
+        flex-direction: row;
+    }
+    a {
+        margin-left: 10px;
     }
 }
 
 main {
     width: 80vw;
-    height: 80vh;
+    max-height: 80vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    padding-top: 2rem;
+    .user-loader {
+        position: absolute;
+        top: 40%;
+    }
+}
+
+.main-container {
+    display: flex;
+    background-color: rgba(248, 250, 253, 0.9);
+    border-radius: 5px;
+}
+
+aside {
+    display: flex;
     flex-direction: column;
+    max-width: 20vw;
+    max-height: 64vh;
+    /* background-color: rgba(248, 250, 253, 0.9); */
+    border-radius: 5px;
+    .status, .info{
+        text-align: left;
+        padding: 3px;
+        margin-top: 2rem;
+    }
+
 }
