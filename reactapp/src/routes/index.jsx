@@ -7,6 +7,7 @@ import Register from "../Register-component/Register";
 import Start from "../pages/Start";
 import UserPage from "../pages/UserPage";
 import TableContainer from "../pages/TableContainer";
+import Admin from "../pages/Admin";
 
 
 
@@ -30,18 +31,34 @@ const Routes = () => {
             element: <ProtectedRoute />,
             children: [
                 {
-                    path: "/",
+                    path: "/login",
+                    element: <UserPage />
+                },
+                // {
+                //     path: "/",
+                //     element: <UserPage />
+                // },
+                {
+                    path: "/userpage",
                     element: <UserPage />, 
                     children: [
                         {
-                            path: "/UserPage",
+                            path: "/userpage/mybet",
                             element: <TableContainer />,
-                        }
+                        },
+                        {
+                            path: "/userpage/profile",
+                            element: <div><h2>Kanske lite fakta om användaren</h2></div>,
+                        },
+                        {
+                            path: "/userpage/leaderboard",
+                            element: <div><h2>Här kommer man kunna se hur det går under säsongen</h2></div>
+                        },
+                        {
+                            path: "/userpage/admin",
+                            element: <Admin />
+                        },
                     ]
-                },
-                {
-                    path: "/profile",
-                    element: <div>User Profile</div>,
                 },
                 {
                     path: "/logout",
@@ -57,7 +74,7 @@ const Routes = () => {
             element: <Start />,
             children: [
                 {
-                    element: <Login loggedIn={false} />,
+                    element: <Login />,
                     children: [
                         {
                             element: <Register />

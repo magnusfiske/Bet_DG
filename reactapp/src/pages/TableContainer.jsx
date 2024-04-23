@@ -1,34 +1,46 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useOutletContext } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
 import React, {useEffect, useState} from "react"
 import axios from "axios";
 import { jwtDecode } from 'jwt-decode';
 import Table from "../components/Table";
 import { DragDropContext } from "react-beautiful-dnd";
+import './UserPage.css'
+import Help from "../components/Help";
+import LoaderSpinner from "../components/LoaderSpinner";
 
 
-export default function TableContainer(props) {
-    const { token } = useAuth();
-    const [isLoading, setIsLoading] = useState(true);
-    const [user, setUser] = useState();
+export default function TableContainer() {
     const [betId, setBetId] = useState();
     const [betRows, setBetRows] = useState();
+    const [unsavedChanges, setUnsavedChanges] = useState(false);
+    const user = useOutletContext();
+    const [deadlineExpired, setDeadlineExpired] = useState();
+
+    const betCloses = new Date('March 30, 2024, 15:00:00');
 
     useEffect(() => {
-      getBetRows();  
-    },[props.user]);
+        const interval = setInterval(() => {
+            const currentTime = new Date();
+            setDeadlineExpired(currentTime.getTime() > betCloses);
+        },1000);
+        return() => clearInterval(interval);
+    },[])
+
+    useEffect(() => {
+      getBetRows(); 
+    },[user]);
 
     const getBetRows = async() => {
         try {
-            var betResponse = await axios.get(`/api/Bet/${props.user.id}`);
+            var betResponse = await axios.get(`https://betdg.azurewebsites.net/api/Bet/${user.id}`);
             if (betResponse.status === 200) {
                 const sortedRows = betResponse.data.betRows.sort((a,b) => a.placing - b.placing);
                 setBetRows(sortedRows);
                 setBetId(betResponse.data.id);
             } 
         } catch (error) {
-            console.log(error);
-            const response = await axios.get('/api/teams');
+            const response = await axios.get('https://betdg.azurewebsites.net/api/teams');
                 const data = await response.data.sort((a,b) => a.position - b.position);
                 var emptyBetRows = data.map(team => ({
                     betId: 0,
@@ -47,78 +59,105 @@ export default function TableContainer(props) {
     }
 
     const onDragEnd = (result) => {
-        const { destination, source, draggableId } = result;
+        if(deadlineExpired) {
+            alert('Allsvenskan har startat och tipset är därmed stängt för i år. Har du en sparad rad sedan tidigare är det den som gäller. I annat fall får du tänka som vi Hammarbyare alltid gör; "nästa år, då jävlar"');
+        } else {
+            const { destination, source, draggableId } = result;
 
-        if(!destination){
-            return;
+            if(!destination){
+                return;
+            }
+
+            if (
+                destination.droppableId === source.droppableId &&
+                destination.index === source.index
+            ) {
+                return;
+            }
+
+            const tableItems = [...betRows];
+            const [draggedItem] = tableItems.splice(result.source.index, 1);
+            tableItems.splice(result.destination.index, 0, draggedItem);
+
+            tableItems.map((item) => {
+                item.placing = tableItems.indexOf(item)+1;
+            });
+
+            setBetRows(tableItems);
+            setUnsavedChanges(true);
         }
-
-        if (
-            destination.droppableId === source.droppableId &&
-            destination.index === source.index
-        ) {
-            return;
-        }
-
-        const tableItems = [...betRows];
-        const [draggedItem] = tableItems.splice(result.source.index, 1);
-        tableItems.splice(result.destination.index, 0, draggedItem);
-
-        tableItems.map((item) => {
-            item.placing = tableItems.indexOf(item)+1;
-        });
-
-        setBetRows(tableItems);
     };
 
     const handleSave = async() => {
-        if(betId == null) {
-            const postBetResponse = await axios({
-                method: 'post',
-                url: '/api/bet',
-                data: {
-                    UserID: user.id
-                }
-            });
-            var data = await postBetResponse.data;
-            setBetId(data.id);
-        }
-
-        if(betRows.some(row => row.id === 0)) {
-            var newBetRows = [];
-            betRows.map((betRow) => newBetRows.push({'betId': betId ?? data.id, 'placing': (betRows.indexOf(betRow)+1), 'teamId': betRow.team.id}));
-            try {
-                const response = await axios({
-                    method: 'post',
-                    url: '/api/BetRows',
-                    data: newBetRows,
-                });
-            } catch (error) {
-                console.log(error);
-            }
+        if(deadlineExpired) {
+            alert('Allsvenskan har startat och tipset är därmed stängt för i år. Har du en sparad rad sedan tidigare är det den som gäller. I annat fall får du tänka som vi Hammarbyare alltid gör; "nästa år, då jävlar"');
         } else {
-            try {
-                await axios({
-                    method: 'put',
-                    url: `/api/BetRows/${betId}`,
-                    data: betRows
-                });
-            } catch (error) {
-                console.log(error);
+            if(betId == null) {
+                try {
+                    const postBetResponse = await axios({
+                        method: 'post',
+                        url: 'https://betdg.azurewebsites.net/api/bet',
+                        data: {
+                            UserID: user.id
+                        }
+                    });
+                    var data = await postBetResponse.data;
+                    
+                    setBetId(data.id);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            if(betRows.some(row => row.id === 0)) {
+                var newBetRows = [];
+                betRows.map((betRow) => newBetRows.push({'betId': betId ?? data.id, 'placing': (betRows.indexOf(betRow)+1), 'teamId': betRow.team.id}));
+                try {
+                    const response = await axios({
+                        method: 'post',
+                        url: 'https://betdg.azurewebsites.net/api/BetRows',
+                        data: newBetRows,
+                    });
+                    if(response.status === 201) {
+                        setUnsavedChanges(false);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            } else {
+                try {
+                    const response = await axios({
+                        method: 'put',
+                        url: `https://betdg.azurewebsites.net/api/BetRows/${betId}`,
+                        data: betRows
+                    });
+                    if(response.status === 204) {
+                        setUnsavedChanges(false);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
             }
         }
     }
 
     return (
         <>
-            <DragDropContext
-                onDragEnd={onDragEnd}>
+            <div className="table-button-container">
+                <DragDropContext
+                    onDragEnd={onDragEnd}>
 
-                {betRows ? <Table betRows={betRows} /> : null
-                }
+                    {betRows ? <Table betRows={betRows} /> : 
+                    <div>
+                        <LoaderSpinner wrapperClass="user-loader"/> 
+                    </div>
+                    }
 
-            </DragDropContext>
-            <button type="button" onClick={handleSave}>spara rad</button>
+                </DragDropContext>
+                <button type="button" className={unsavedChanges ? 'needs-save' : 'changes-saved'} 
+                disabled={!unsavedChanges || deadlineExpired} onClick={handleSave}>{unsavedChanges ? 'spara rad' : deadlineExpired ? 'tipset stängt' : 'allt sparat'}</button>
+            </div>
+            <Help />
         </>
     );
 }

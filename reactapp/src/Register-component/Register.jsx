@@ -17,8 +17,12 @@ export default function Register(props) {
     
     const handleChange = (e) => {
         validateInput(e.target.value, e.target.name);
-        console.log(validPassword);
         setInputFields({...inputFields, [e.target.name]: e.target.value});
+        // console.log('validInput:', validInput, 'validPassword', validPassword);
+        // if(validInput === false && validPassword === false) {
+        //     console.log('dåligt');
+        //     props.invalidPassword(true);
+        // }
     }
     
     const validateInput = (input, inputType) => {
@@ -49,7 +53,7 @@ export default function Register(props) {
                 ] })
             }
             
-            const response = await fetch('/api/accounts/register', requestOptions);
+            const response = await fetch('https://betdg.azurewebsites.net/api/accounts/register', requestOptions);
             if(response.status === 200) {
                 const data = await response.json();
                 handleLogin(data);
@@ -60,6 +64,10 @@ export default function Register(props) {
         }
         else {
             setValidInput(false);
+            if(validPassword === false) {
+                alert('Lösenordet behöver innehålla 8 tecken och bestå av såväl bokstäver som siffror och specialtecken (tex & ? %)');
+                props.invalidPassword(true);
+            }
         }
     }
 

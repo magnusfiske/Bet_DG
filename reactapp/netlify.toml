@@ -1,0 +1,6 @@
+[[redirects]]
+  from = "/api/*"
+  to = "https://betdg.azurewebsites.net/:splat"
+  status = 200
+  force = true
+

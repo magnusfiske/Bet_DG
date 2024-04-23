@@ -1,26 +1,46 @@
 .table-container {
-    background-color: green;
+    background-color: var(--primary-color);
     padding: 5px;
     border-radius: 5px;
     margin-right: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
+}
+
+.table-button-container {
+    margin-left: 2rem;
 }
 
 table {
-    width: 30vw;
+    max-width: 30vw;
+    /* :is(td) {
+        font-size: 14px;
+    } */
 }
 
 .table-row {
     border-style: solid;
     border-color: black;
     border: 1px;
-    background-color: white;
+    background-color: var(--secondary-color);
 }
 
 thead td {
-    color: white;
+    color: var(--text-color);
+    background-color: var(--primary-color);
 }
 
 .cell-name {
     text-align: left;
     padding-left: 5px;
+}
+
+.admin-table {
+    width: 80vw;
+}
+
+@media screen and (min-width:600px) {
+    .admin-table {
+        width: 35vw;
+    }
 }

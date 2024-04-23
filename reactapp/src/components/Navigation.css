@@ -1,0 +1,90 @@
+.bottom {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    justify-content: space-between;
+    align-items: center;
+    .logo {
+        margin-left: 2rem;
+    }
+}
+
+i {
+    color: var(--text-color);
+}
+
+#log-out{
+    color: var(--secondary-text-color);
+}
+
+#menu-button {
+    background: none;
+    box-shadow: none;
+    color: var(--secondary-color);
+    font-size: x-large;
+    height: auto;
+    margin: 0.5rem;
+}
+
+#menu-button:focus {
+    outline: none;
+}
+
+#menu-button:hover {
+    border: none;
+}
+
+.top {
+    position: fixed;
+    top: 0;
+}
+
+.nav {
+    background-color: var(--primary-color);
+    width: 100%;
+    z-index: 21;
+    display: flex;
+    justify-content: space-between;
+    :is(p) {
+        color: var(--text-color);
+    }
+    
+    :is(button) {
+        margin-left: 1.5rem;
+    }
+    .header-start {
+        display: flex;
+        flex-direction: row;
+    }
+    .header-end {
+        display:flex;
+        justify-content: end;
+        align-items: center;
+        margin-right: 2rem;
+    }
+    .navigation {
+        display: flex;
+        flex-direction: row;
+    }
+    .header-logo {
+        display: flex;
+        align-items: baseline;
+        :is(h1), :is(h2) {
+            color: black;
+            margin: 1rem;
+        }
+
+    }
+    :is(a) {
+        margin-left: 10px;
+    }
+
+    #log-out{
+        margin: 0;
+    }
+
+    /* .burger-container {
+        position: relative;
+    } */
+}

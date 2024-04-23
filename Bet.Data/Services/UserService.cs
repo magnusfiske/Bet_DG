@@ -9,6 +9,25 @@ public class UserService : IUserService
         _userManager = userManager;
     }
 
+    public async Task<List<BetUser>> GetUsersAsync(List<string> ids)
+    {
+        try
+        {
+            var users = new List<BetUser>();
+
+            foreach (var id in ids)
+            {
+                users.Add(await _userManager.FindByIdAsync(id) ?? new BetUser());
+            }
+
+            return users;
+        }
+        catch 
+        {
+            return default;
+        }
+    }
+
     public async Task<BetUser> GetUserEmailAsync(string email)
     {
         try

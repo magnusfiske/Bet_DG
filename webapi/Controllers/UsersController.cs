@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Bet.API.Controllers;
 [Authorize]
@@ -10,10 +9,12 @@ namespace Bet.API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IDbService _db;
+    private readonly IUserService _userDb;
 
-    public UsersController(IDbService db)
+    public UsersController(IDbService db, IUserService userDb)
     {
         _db = db;
+        _userDb = userDb;
     }
 
     // GET: api/<UsersController>
@@ -24,6 +25,15 @@ public class UsersController : ControllerBase
         return Results.Ok(await _db.GetAsync<User, UserDTO>());
     }
 
+    [Authorize(Roles = "Admin")]
+    [Route("userEmails")]
+    [HttpPost]
+    public async Task<IResult> GetAspNetUsers([FromBody] List<string> AspNetUserIds)
+    {
+        return Results.Ok(await _userDb.GetUsersAsync(AspNetUserIds));
+    }
+
+    [EnableCors("CorsAllAccessPolicy")]
     [Route("userId/{AspNetUserId}")]
     [HttpGet]
     public async Task<IResult> Get(string AspNetUserId)
@@ -65,6 +75,7 @@ public class UsersController : ControllerBase
     }
 
     // PUT api/<UsersController>/5
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IResult> Put(int id, [FromBody] UserDTO dto)
     {

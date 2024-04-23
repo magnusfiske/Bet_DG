@@ -1,19 +1,11 @@
 #root {
-  max-width: 1280px;
+  width: 100vw;
   margin: 0 auto;
-  /* padding: 2rem; */
   text-align: center;
 }
 
-h1, h2{
-  color:azure;
-}
-
-/* .center {
-  height: 70vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+/* h1, h2{
+  color:rgb(158, 215, 155);
 } */
 
 .login-container {
@@ -21,15 +13,24 @@ h1, h2{
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url('./assets/allsvenskan_background.jpeg');
+  background-size: cover;
 }
 
 .input-container {
   display: flex;
   flex-direction: column;
   margin-bottom: 5px;
-  label {
+  :is(label) {
     color:black;
   }
+}
+
+button {
+  height: 1.75rem;
+  /* box-shadow: 10px; */
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
 }
 
 form {
@@ -42,6 +43,10 @@ form {
   margin-left: 0;
   height: 1.5rem;
   font-size: 0.9em;
+}
+
+.button-container {
+  margin-top: 10px;
 }
 
 /* .toggle {
@@ -63,20 +68,4 @@ form {
   text-align: center;
   display:flex;
   flex-direction: column;
-  /* justify-content: center; */
 }
-
-body {
-  background-image: url('./assets/allsvenskan_background.jpeg');
-  background-size: cover;
-}
-/* table {
-  justify-self: center;
-} */
-
-/* table td {
-  border-style: solid;
-  border-color: black;
-  border: 1px;
-  background-color: white;
-} */

@@ -20,4 +20,6 @@ public class User : IEntity
     public string? AspNetUserId { get; set; }
 
     public virtual ICollection<Bet>? Bets { get; set; }
+
+    public virtual BetUser AspNetUser { get; set; }
 }

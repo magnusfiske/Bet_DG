@@ -9,7 +9,7 @@ export const getToken = async (email, password) => {
         })
     }
 
-    const response = await fetch('/api/token', requestOptions)
+    const response = await fetch('https://betdg.azurewebsites.net/api/token', requestOptions)
     if (response.ok) {
         return response.json();
     }

@@ -1,0 +1,15 @@
+#root{
+    --primary-color: rgb(158, 215, 155);
+    --secondary-color: white;
+    --text-color: white; 
+    --secondary-text-color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+    #root {
+        --primary-color: rgb(25, 44, 21);
+        --secondary-color: rgb(22,22,22);
+        --text-color: lightgrey;
+        --secondary-text-color: lightgrey;
+    }
+}

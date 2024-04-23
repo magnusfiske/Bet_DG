@@ -1,0 +1,36 @@
+i {
+    margin-right: 1rem;
+}
+
+/* .burger-container {
+    position: relative;
+} */
+
+.menu-item-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 3.2rem;
+    right: 0;
+    z-index: 230;
+}
+
+.menu-item {
+    display: flex;
+    background-color: var(--primary-color);
+    z-index: 22;
+    width: 13rem;
+    height: 4rem;
+    align-items: center;
+    :is(a) {
+        width: 9rem;
+        text-align: left;
+        margin-left: 1rem;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .menu-item {
+        width: 9rem;
+    }
+}

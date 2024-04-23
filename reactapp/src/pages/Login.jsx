@@ -17,6 +17,7 @@ const Login = (props) => {
     const [register, setRegister] = useState(false);
     const [error, setError] = useState();
     const [account, setAccount] = useState();
+    const [invalidPassword, setInvalidPassword] = useState(false);
 
 
     const handleChange = (e) => {
@@ -47,7 +48,7 @@ const Login = (props) => {
   
     const handleLogin = (tokenFromApi, decodedToken) => {
         setToken(tokenFromApi);
-        navigate('/UserPage', { replace: true });
+        navigate('/userpage', { replace: true });
     };
   
     return(
@@ -58,34 +59,39 @@ const Login = (props) => {
                 <h2>Djurgymnasiet</h2>
             </div>
         </div>
-            <div className='login'>
-            {!register &&
-                <form onSubmit={(e) => handleSubmit(e)}>
-                    <div className='input-container email'>
-                        <label htmlFor='email'>Epost </label>
-                        <input 
-                            type='text' 
-                            name='email'
-                            value={loginFields.email}
-                            onChange={handleChange}/>
-                    </div>
-                    <div className='input-container password'>
-                        <label htmlFor='password'>Lösenord </label>
-                        <input 
-                            type='password' 
-                            name='password'
-                            value={loginFields.password}
-                            onChange={handleChange}/>
+            <div>
+                <div className='login'>
+                {!register &&
+                    <form onSubmit={(e) => handleSubmit(e)}>
+                        <div className='input-container email'>
+                            <label htmlFor='email'>Epost </label>
+                            <input 
+                                type='text' 
+                                name='email'
+                                value={loginFields.email}
+                                onChange={handleChange}/>
                         </div>
-                    <div className='button-container'>
-                        <button className='login-btn' type='submit'>Logga in</button>
-                    </div>
-                </form> 
-                }
-                {register && 
-                    <Register setToken={tokenSetter}/>
-                }
-                <button className='toggle login-btn' type='button' onClick={(e) => toggleRegister(e)}>{register ? 'Har konto?' : 'Ny användare?'}</button>
+                        <div className='input-container password'>
+                            <label htmlFor='password'>Lösenord </label>
+                            <input 
+                                type='password' 
+                                name='password'
+                                value={loginFields.password}
+                                onChange={handleChange}/>
+                            </div>
+                        <div className='button-container'>
+                            <button className='login-btn' type='submit'>Logga in</button>
+                        </div>
+                    </form> 
+                    }
+                    {register && 
+                        <Register setToken={tokenSetter} invalidPassword={setInvalidPassword}/>
+                    }
+                    <button className='toggle login-btn' type='button' onClick={(e) => toggleRegister(e)}>{register ? 'Har konto?' : 'Ny användare?'}</button>
+                </div>
+                {/*invalidPassword && <div className='bad-password'>
+                    <p>Lösenordet behöver innehålla 8 tecken och innehålla såväl bokstäver som siffror och specialtecken (tex & ? %)</p>
+                </div>*/}
             </div>
         </>
     );

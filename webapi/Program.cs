@@ -20,10 +20,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(policy => {
-    policy.AddPolicy("CorsAllAccessPolicy", opt =>
-        opt.AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod()
+    policy.AddPolicy(name: "CorsAllAccessPolicy", opt =>
+        opt.AllowAnyHeader()
+           .AllowAnyMethod()
+           .AllowAnyOrigin()
     );
 });
 
@@ -108,7 +108,8 @@ void ConfigureAutomapper(IServiceCollection services)
         cfg.CreateMap<Team, TeamDTO>().ReverseMap();
         cfg.CreateMap<User, UserDTO>()
         .ForMember(dest => dest.Bets, src => src.MapFrom(s => s.Bets.Select(y => y.Id)))
-        .ReverseMap();
+        .ReverseMap()
+        .ForMember(dest => dest.Bets, src => src.Ignore());
     });
 
     var mapper = config.CreateMapper();

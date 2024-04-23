@@ -1,3 +1,12 @@
 .invalidInputContainer {
     border: 2px solid red;
 }
+
+.bad-password {
+    position: relative;
+    
+
+    background-color: rgba(121, 121, 121, 0.8);
+    padding: 1rem;
+    width: 13rem;
+}

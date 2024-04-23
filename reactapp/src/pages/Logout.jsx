@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
+import { useEffect } from "react";
 
 const Logout = () => {
   const { setToken } = useAuth();
@@ -7,14 +8,16 @@ const Logout = () => {
 
   const handleLogout = () => {
     setToken();
-    navigate("/", { replace: true });
+    setTimeout(() => {
+      navigate("/", { replace: true });
+    }, 500);
   };
 
-  setTimeout(() => {
-    handleLogout();
-  }, 3 * 1000);
+  useEffect(() => {
+      handleLogout();
+  },[])
 
-  return <>Logout Page</>;
+  return( <>Logout Page</>)
 };
 
 export default Logout;

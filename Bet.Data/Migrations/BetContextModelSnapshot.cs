@@ -37,7 +37,7 @@ namespace Bet.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bets");
+                    b.ToTable("Bets", (string)null);
                 });
 
             modelBuilder.Entity("Bet.Data.Entities.BetRow", b =>
@@ -63,7 +63,7 @@ namespace Bet.Data.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("BetRows");
+                    b.ToTable("BetRows", (string)null);
                 });
 
             modelBuilder.Entity("Bet.Data.Entities.BetUser", b =>
@@ -150,7 +150,7 @@ namespace Bet.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
 
                     b.HasData(
                         new
@@ -289,7 +289,7 @@ namespace Bet.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

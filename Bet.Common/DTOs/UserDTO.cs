@@ -17,5 +17,13 @@ public record UserDTO
 
     public string? AspNetUserId { get; set; }
 
+    public virtual BetUserDTO AspNetUser { get; set; }
+
     public virtual List<int>? Bets { get; set; }
+}
+
+public record BetUserDTO
+{
+    public string Id { get; set; }
+    public string Email { get; set; }
 }
