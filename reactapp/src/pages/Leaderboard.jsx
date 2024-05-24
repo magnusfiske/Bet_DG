@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
-import { useAuth } from "../provider/authProvider";
-import { useOutletContext } from "react-router-dom";
 
-export default function Leaderboard(props) {
-    const [betRows, setBetRows] = useState();
+import { useAuth } from "../provider/authProvider";
+//import { useOutletContext } from "react-router-dom";
+
+export default function Leaderboard() {
+    const [betRows, setBetRows] = useState([]);
     const user = useOutletContext();
 
     useEffect(() => {
@@ -18,8 +18,16 @@ export default function Leaderboard(props) {
             if (betResponse.status === 200) {
                 const sortedRows = betResponse.data.betRows.sort((a,b) => a.placing - b.placing);
                 setBetRows(sortedRows);
-                setBetId(betResponse.data.id);
-            } 
+                // setBetId(betResponse.data.id);
+            }
+
+            betRows.array.forEach(element => {
+                currentTeamTable.forEach(team => {
+                    
+                })
+            });
+        } catch {
+            alert('Buuhuuu');
         }
     }
 

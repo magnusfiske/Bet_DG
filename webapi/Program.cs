@@ -108,8 +108,10 @@ void ConfigureAutomapper(IServiceCollection services)
         cfg.CreateMap<Team, TeamDTO>().ReverseMap();
         cfg.CreateMap<User, UserDTO>()
         .ForMember(dest => dest.Bets, src => src.MapFrom(s => s.Bets.Select(y => y.Id)))
+        .ForMember(dest => dest.AspNetUser, src => src.MapFrom(s => s.AspNetUser))
         .ReverseMap()
         .ForMember(dest => dest.Bets, src => src.Ignore());
+        cfg.CreateMap<BetUser, BetUserDTO>().ReverseMap();
     });
 
     var mapper = config.CreateMapper();

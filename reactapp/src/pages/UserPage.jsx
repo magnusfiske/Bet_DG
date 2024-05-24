@@ -46,7 +46,14 @@ export default function UserPage() {
     const getUser = async() => {
         const decodedToken = jwtDecode(token);
         const aspNetUserId = decodedToken.jti;
-        const response = await axios.get('https://betdg.azurewebsites.net/api/Users/userId/' + aspNetUserId);
+        console.log(axios.defaults.headers.common);
+        const response = await axios.get('https://betdg.azurewebsites.net/api/Users/userId/' + aspNetUserId, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+
+        })
+        //const response = await axios.get('https://betdg.azurewebsites.net/api/Users/userId/' + aspNetUserId);
         setUser(await response.data);
         navigate('/userpage/mybet', {replace: true});
     }
